@@ -5,7 +5,7 @@
 
 ```bash
 
-git  clone  git@github.com:petitdelice/test_technique_cfp_piaw_cavarec.git
+git clone git@github.com:petitdelice/test_technique_cfp_piaw_cavarec.git
 
 ```
 

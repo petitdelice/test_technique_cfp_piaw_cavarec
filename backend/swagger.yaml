@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Task Management API
+  description: API de gestion de tâches utilisée pour le test technique
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Serveur local de développement
+
+paths:
+  /tasks:
+    get:
+      summary: Récupérer toutes les tâches
+      responses:
+        '200':
+          description: Liste des tâches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+
+    post:
+      summary: Créer une nouvelle tâche
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTask'
+      responses:
+        '200':
+          description: Tâche créée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+  /tasks/{id}:
+    delete:
+      summary: Supprimer une tâche par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de la tâche à supprimer
+      responses:
+        '200':
+          description: Tâche supprimée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Tâche non trouvée
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+        '400':
+          description: ID manquant
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+    patch:
+      summary: Mettre à jour le statut d'une tâche (done/pending)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: ID de la tâche à modifier
+      responses:
+        '200':
+          description: Tâche mise à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '404':
+          description: Tâche non trouvée
+        '400':
+          description: ID manquant
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          example: "Faire les courses"
+        description:
+          type: string
+          example: "Acheter du pain, du lait et des œufs"
+        status:
+          type: string
+          enum: [pending, done]
+          example: "pending"
+
+    NewTask:
+      type: object
+      required:
+        - title
+        - description
+      properties:
+        title:
+          type: string
+          example: "Ma nouvelle tâche"
+        description:
+          type: string
+          example: "Ceci est une description"
